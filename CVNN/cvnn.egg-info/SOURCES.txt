@@ -1,0 +1,12 @@
+README.md
+setup.py
+cvnn/__init__.py
+cvnn/activations.py
+cvnn/initialisations.py
+cvnn/layers.py
+cvnn/model.py
+cvnn.egg-info/PKG-INFO
+cvnn.egg-info/SOURCES.txt
+cvnn.egg-info/dependency_links.txt
+cvnn.egg-info/requires.txt
+cvnn.egg-info/top_level.txt
