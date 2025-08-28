@@ -1,3 +1,30 @@
+
+# CVNN_Jamie: Complex-Valued Neural Network Framework
+
+CVNN_Jamie is a Python library for building and training complex-valued neural networks. It provides modular layers, a flexible Sequential model, a wide range of complex activation functions, and custom initialisation methods. Designed for research and experimentation with complex-valued data and models.
+
+## Features
+- Complex-valued layers (Dense, Activation, etc.)
+- Modular and extensible design
+- Custom activation functions and derivatives
+- Multiple initialisation methods (including custom/phase-constrained)
+- Easy integration with NumPy
+- Simple Sequential API for stacking layers and activations
+- Full backpropagation and training support
+
+## Installation
+
+Install from PyPI:
+```sh
+pip install CVNN_Jamie
+```
+Or from source:
+```sh
+pip install -r requirements.txt
+```
+
+---
+
 ## Model API: Sequential
 
 
