@@ -7,6 +7,8 @@ CVNN_Jamie.egg-info/requires.txt
 CVNN_Jamie.egg-info/top_level.txt
 cvnn/__init__.py
 cvnn/activations.py
+cvnn/data.py
+cvnn/help.py
 cvnn/initialisations.py
 cvnn/layers.py
 cvnn/model.py

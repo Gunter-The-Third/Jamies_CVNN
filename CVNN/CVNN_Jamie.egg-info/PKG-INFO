@@ -1,12 +1,18 @@
 Metadata-Version: 2.1
 Name: CVNN-Jamie
-Version: 0.1.2
-Summary: A neural network framework supporting complex-valued neural networks
-Home-page: UNKNOWN
+Version: 0.2.36
+Summary: A neural network framework supporting complex and real-valued neural networks
+Home-page: https://github.com/Gunter-The-Third/Jamies_CVNN
 Author: Jamie Keegan-Treloar
 Author-email: jamie.kt@icloud.com
 License: UNKNOWN
+Keywords: complex neural network,real neural network,deep learning,numpy
 Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
 Requires-Python: >=3.7
 Description-Content-Type: text/markdown
 
@@ -40,53 +46,78 @@ pip install -r requirements.txt
 ## Model API: Sequential
 
 
-You can easily build single-layer or multilayer networks using the `Sequential` model (import from `cvnn`):
 
-### Single-Layer Network
+## Model Construction: Real and Complex Networks
+
+### Complex-Valued Network (default)
 ```python
 from cvnn import Sequential
-from cvnn.layers import ComplexDense
+from cvnn.layers import Dense
 from cvnn.activations import complex_relu
 import numpy as np
 
+# Each Dense layer is complex by default
 model = Sequential([
-	ComplexDense(input_dim=4, output_dim=2),
+	Dense(input_dim=4, output_dim=2),
 	complex_relu
 ])
 x = np.random.randn(1, 4) + 1j * np.random.randn(1, 4)
 out = model.forward(x)
-print("Single-layer output:", out)
+print("Single-layer output (complex):", out)
 ```
 
-### Multilayer Network
+### Real-Valued Network
 ```python
 from cvnn import Sequential
-from cvnn.layers import ComplexDense
-from cvnn.activations import complex_relu, complex_tanh
+from cvnn.layers import Dense
+from cvnn.activations import complex_relu
 import numpy as np
 
+# Use real=True for Dense, and pass real=True to activations
 model = Sequential([
-	ComplexDense(input_dim=4, output_dim=8),
-	complex_relu,
-	ComplexDense(input_dim=8, output_dim=2),
-	complex_tanh
-])
-x = np.random.randn(1, 4) + 1j * np.random.randn(1, 4)
+	Dense(input_dim=4, output_dim=2, real=True),
+	lambda x: complex_relu(x, real=True)
+], complex=False)
+x = np.random.randn(1, 4)
 out = model.forward(x)
-print("Multilayer output:", out)
+print("Single-layer output (real):", out)
+```
+
+### Multilayer Real or Complex Network
+```python
+from cvnn import Sequential
+from cvnn.layers import Dense
+from cvnn.activations import complex_tanh, complex_sigmoid
+import numpy as np
+
+# Real-valued multilayer
+model = Sequential([
+	Dense(2, 2, real=True),
+	(lambda x: complex_tanh(x, real=True), lambda z, g: complex_tanh_backward(z, g, real=True)),
+	Dense(2, 1, real=True),
+	(lambda x: complex_sigmoid(x, real=True), lambda z, g: complex_sigmoid_backward(z, g, real=True))
+], complex=False)
+
+# Complex-valued multilayer
+model_c = Sequential([
+	Dense(2, 2),
+	(complex_tanh, complex_tanh_backward),
+	Dense(2, 1),
+	(complex_sigmoid, complex_sigmoid_backward)
+])
 ```
 
 ### Training (Demo: 1-layer, MSE loss, SGD)
 ```python
 from cvnn import Sequential
-from cvnn.layers import ComplexDense
+from cvnn.layers import Dense
 import numpy as np
 
-# Dummy data: learn identity mapping
+# Dummy data: learn identity mapping (complex)
 x = np.random.randn(10, 2) + 1j * np.random.randn(10, 2)
 y = x.copy()
 model = Sequential([
-	ComplexDense(input_dim=2, output_dim=2)
+	Dense(input_dim=2, output_dim=2)
 ])
 model.fit(x, y, epochs=50, lr=0.01)
 ```

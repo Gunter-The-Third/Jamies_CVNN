@@ -1,8 +1,8 @@
 import numpy as np
 from cvnn import Sequential
 from cvnn.layers import ComplexDense
-from cvnn.activations import complex_relu, complex_tanh, jam, jam_derivative, complex_relu_backward, complex_tanh_backward
-from cvnn.initialisations import jamie
+from cvnn.activations import complex_relu, complex_tanh, complex_sigmoid, jam, jam_derivative, complex_relu_backward, complex_tanh_backward, complex_sigmoid_backward
+from cvnn.initialisations import jamie, jamie_bias
 
 
 # Complex XOR dataset: x = [1+1j], [1-1j], [-1+1j], [-1-1j] (single input dim)
@@ -20,11 +20,9 @@ Yc = np.array([
     [0],  # (-1, -1) -> 0
 ], dtype=np.complex128)
 
-# Multilayer model for XOR
+# Single layer model for XOR using JAM activation
 model = Sequential([
-    ComplexDense(input_dim=1, output_dim=8, weight_init=jamie),
-    (complex_tanh, complex_tanh_backward),
-    ComplexDense(input_dim=8, output_dim=1, weight_init=jamie),
+    ComplexDense(input_dim=1, output_dim=1, weight_init=jamie),
     (jam, jam_derivative)
 ])
 
@@ -53,3 +51,30 @@ if '--plot' in sys.argv:
         plt.show()
     except ImportError:
         print('matplotlib not installed, cannot plot.')
+        
+# Multiple Tests
+if '--multiple' in sys.argv:
+    num_runs = 1000
+    converged_count = 0
+    epochs_to_converge = []
+
+    for seed in range(num_runs):
+        np.random.seed(seed)
+        model = Sequential([
+            ComplexDense(input_dim=1, output_dim=1, weight_init=jamie,bias_init=jamie_bias),
+            (jam, jam_derivative)
+        ])
+        history = model.fit(Xc, Yc, epochs=1000, lr=0.1, return_history=True)
+        losses = history['loss']
+        # Convergence: loss < 0.01
+        converged = np.any(np.array(losses) < 0.01)
+        if converged:
+            converged_count += 1
+            first_epoch = np.where(np.array(losses) < 0.01)[0][0] + 1
+            epochs_to_converge.append(first_epoch)
+
+    print(f"Out of {num_runs} runs, {converged_count} converged.")
+    if epochs_to_converge:
+        print(f"Epochs to converge (min/mean/max): {min(epochs_to_converge)}/{np.mean(epochs_to_converge):.1f}/{max(epochs_to_converge)}")
+    else:
+        print("No runs converged.")
