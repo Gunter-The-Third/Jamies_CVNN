@@ -8,7 +8,7 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md'), encoding='utf-8'
 
 setup(
     name='CVNN_Jamie',
-    version='0.2.36',
+    version='0.2.40',
     description='A neural network framework supporting complex and real-valued neural networks',
     long_description=long_description,
     long_description_content_type='text/markdown',

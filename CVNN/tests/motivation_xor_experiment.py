@@ -4,7 +4,8 @@ from cvnn.layers import Dense
 from cvnn.activations import (
     relu, relu_backward, complex_relu, complex_relu_backward,
     sigmoid, sigmoid_backward, complex_sigmoid, complex_sigmoid_backward,
-    tanh, tanh_backward, complex_tanh, complex_tanh_backward
+    tanh, tanh_backward, complex_tanh, complex_tanh_backward,
+    jam, jam_derivative
 )
 from cvnn.initialisations import (
     zeros, ones, normal, glorot_uniform, he_normal,
@@ -45,7 +46,7 @@ Y_complex = np.array([
 # Model builders
 def make_single_neuron_complex(weight_init, bias_init, activation, activation_deriv):
     return Sequential([
-        Dense(2, 1, weight_init=weight_init, bias_init=bias_init),
+        Dense(1, 1, weight_init=weight_init, bias_init=bias_init),
         (activation, activation_deriv)
     ])
 
@@ -64,11 +65,13 @@ activations_real = [
     (relu, relu_backward, 'relu'),
     (sigmoid, sigmoid_backward, 'sigmoid'),
     (tanh, tanh_backward, 'tanh')
-]
+    ]
 activations_complex = [
     (complex_relu, complex_relu_backward, 'complex_relu'),
     (complex_sigmoid, complex_sigmoid_backward, 'complex_sigmoid'),
-    (complex_tanh, complex_tanh_backward, 'complex_tanh')
+    (complex_tanh, complex_tanh_backward, 'complex_tanh'),
+    (jam, jam_derivative, 'jam')  # Example of a custom activation
+
 ]
 lrs = [0.01, 0.05, 0.1]
 
