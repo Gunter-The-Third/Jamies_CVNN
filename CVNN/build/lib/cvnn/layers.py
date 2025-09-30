@@ -142,20 +142,23 @@ class Sequential:
         for l in self.layers:
             if hasattr(l, "forward"):
                 x = l.forward(x)
-                self.cache.append(("layer", l))
+                self.cache.append(("layer", l, None))
             elif isinstance(l, tuple) and callable(l[0]):
+                # Cache the PRE-activation value for the derivative
+                pre_activation = x.copy()
                 x = l[0](x)
-                self.cache.append(("activation", l))
+                self.cache.append(("activation", l, pre_activation))
             else:
                 raise ValueError("Unknown layer/activation type")
         return x
 
     def backward(self, grad, lr=0.01):
-        for kind, l in reversed(self.cache):
+        for kind, l, cached_value in reversed(self.cache):
             if kind == "activation":
                 # l is (activation, derivative)
                 if l[1] is not None:
-                    grad = l[1](self.cache[self.cache.index((kind, l))-1][1].x_cache, grad)
+                    # Use the cached PRE-activation value
+                    grad = l[1](cached_value, grad)
                 else:
                     raise ValueError("Activation missing derivative")
             else:

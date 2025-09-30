@@ -1,13 +1,11 @@
-Metadata-Version: 2.1
-Name: CVNN-Jamie
+Metadata-Version: 2.4
+Name: CVNN_Jamie
 Version: 0.2.36
 Summary: A neural network framework supporting complex and real-valued neural networks
 Home-page: https://github.com/Gunter-The-Third/Jamies_CVNN
 Author: Jamie Keegan-Treloar
 Author-email: jamie.kt@icloud.com
-License: UNKNOWN
 Keywords: complex neural network,real neural network,deep learning,numpy
-Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
@@ -15,6 +13,17 @@ Classifier: Intended Audience :: Science/Research
 Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
 Requires-Python: >=3.7
 Description-Content-Type: text/markdown
+Requires-Dist: numpy
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: keywords
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
 
 
 # CVNN_Jamie: Complex-Valued Neural Network Framework
@@ -178,5 +187,3 @@ print("Jamie init:", b)
 
 ## License
 MIT
-
-

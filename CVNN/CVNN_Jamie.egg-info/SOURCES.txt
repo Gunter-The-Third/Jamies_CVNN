@@ -12,3 +12,4 @@ cvnn/help.py
 cvnn/initialisations.py
 cvnn/layers.py
 cvnn/model.py
+tests/test_sequential_fix.py
